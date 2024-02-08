@@ -10,7 +10,9 @@ const trainmodel = require("./model/training");
 const recruitmodel = require("./model/recruitment");
 const employeemodel = require("./model/employee");
 const guestusermodel = require("./model/guest");
-const grievancemodel = require("./model/grievance");
+const grimodel = require("./employeeside/grievance");
+const newmodel = require("./employeeside/newuse/registration");
+
 
 
 
@@ -51,14 +53,7 @@ app.get('/trainingview',async(request,response)=>{
 app.get('/trainingview',async(request,response)=>{
      var data = await trainmodel.find();
      response.send(data)
-     })
-
-//for delete
-// app.put('/remove/:id',async(request,response)=>{
-//         let id = request.params.id
-//         await trainmodel.findByIdAndUpdate(id)
-//         response.send("Record deleted")
-//         })    
+     })    
         
 app.put('/trainingedit/:id', async(request,response)=>{
 let id = request.params.id
@@ -98,12 +93,7 @@ app.put('/recruitmentedit/:id', async(request,response)=>{
          await recruitmodel.findByIdAndUpdate(id,request.body)
         response.send("Record Deleted")
          })
-// app.put('/remove1/:id',async(request,response)=>{
-//          let id = request.params.id
-//          await recruitmodel.findByIdAndUpdate(id)
-//          response.send("Record deleted")
-//         }) 
-
+/
 //employee
 app.post('/new2',(request,response)=>{
     console.log(request.body)
@@ -143,4 +133,21 @@ let id = request.params.id
  response.send("Record Deleted")
    })   
 
+//emuser
+//grievance
+///save data button
+app.post('/grievance',(request,response)=>{
+  console.log(request.body)
+  new grimodel(request.body).save();
+  response.send("Record Sucessfully Saved")
+  })
+
+
+ //newuser
+ //save button
+ app.post('/newuserreg',(request,response)=>{
+  console.log(request.body)
+  new newmodel(request.body).save();
+  response.send("Record Sucessfully Saved")
+  })
 
