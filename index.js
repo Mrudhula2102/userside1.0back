@@ -12,6 +12,7 @@ const employeemodel = require("./model/employee");
 const guestusermodel = require("./model/guest");
 const grimodel = require("./employeeside/grievance");
 const newmodel = require("./employeeside/newuse/registration");
+const loginemodel = require("./model/logine");
 
 
 
@@ -134,6 +135,37 @@ let id = request.params.id
    })   
 
 //emuser
+
+app.post("/employeelogin", async (req, res) => {
+  const { empid, password } = req.body;
+  try {
+    const userr = await loginemodel.findOne({ empid });
+
+    if (userr) {
+      if (userr.password === password) {
+        // If the user authentication is successful, save login details to MongoDB
+        const loginDetails = new loginemodel({
+          empid,
+          loginTime: new Date(),
+        });
+        await loginDetails.save();
+        res.json("Success");
+      } else {
+        res.json("Password is incorrect");
+      }
+    } else {
+      res.json("User not found");
+    }
+  } catch (error) {
+    console.error("Error during user authentication:", error);
+    res.status(500).json("Internal server error");
+  }
+});
+// app.get('/employees',async(request,response)=>{
+//   var data = await loginemodel.find();
+//   response.send(data)
+// })
+
 //grievance
 ///save data button
 app.post('/grievance',(request,response)=>{
@@ -141,6 +173,7 @@ app.post('/grievance',(request,response)=>{
   new grimodel(request.body).save();
   response.send("Record Sucessfully Saved")
   })
+ 
 
 
  //newuser
